@@ -1,8 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState, useEffect }  from 'react';
-import { List, Grid, AppBar, Typography, Box} from '@material-ui/core';
+import { List, Grid, AppBar, Typography, Box } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import '../App.css';
 import '@fontsource/roboto';
+import ReactPaginate from 'react-paginate';
 import AddTask from './AddTask'
 import Task from './Task';
 import { createTask, updateTask, deleteTask, getTasks } from '../API';
@@ -16,17 +18,26 @@ const useStyles = makeStyles((theme) => ({
 
 const Layout = () => {
   const classes = useStyles();
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const [currentPage, setCurrentPage] = useState(0);
 
-    const [tasks, setTasks] = useState<Task[]>([]);
+  const fetchTasks = (): void => {
+    getTasks()
+    .then(({ data: { tasks } }: Task[] | any) => setTasks(tasks))
+    .catch((err: Error) => console.log(err))
+  };
 
-    const fetchTasks = (): void => {
-      getTasks()
-      .then(({ data: { tasks } }: Task[] | any) => setTasks(tasks))
-      .catch((err: Error) => console.log(err))
-    }
-    useEffect(() => {
-      fetchTasks();
-    });
+  useEffect(() => {
+    fetchTasks();
+  });
+
+  const PER_PAGE: number = 20;
+  const offset: number = currentPage * PER_PAGE;
+  const pageCount: number = Math.ceil(tasks.length / PER_PAGE);
+  
+  const handlePageClick = function ({selected:selectedPage}: any) {
+    setCurrentPage(selectedPage)
+  }
 
     const handleAddTask = (e: React.FormEvent, formData: Task): void => {
         createTask(formData)
@@ -38,7 +49,6 @@ const Layout = () => {
        })
        .catch((err) => console.log(err))
      };
-
 
      const handleUpdateTask = (task: Task): void => {
        updateTask(task)
@@ -67,16 +77,29 @@ const Layout = () => {
             </AppBar>
             <Box style={{marginTop: 30}}>
             <AddTask newTask={handleAddTask}/>
-            <List className={classes.root}>
-
-            {tasks.map((task: Task) => (
-              <Task 
-                key={task._id}
-                task={task} 
-                updateTask={handleUpdateTask}
-                deleteTask={handleDeleteTask}
-                />
-            ) )}
+            <ReactPaginate 
+              previousLabel={'<- Previous'}
+              nextLabel={'Next ->'}
+              pageCount={pageCount}
+              onPageChange={handlePageClick} 
+              pageRangeDisplayed={2} 
+              marginPagesDisplayed={2}   
+              containerClassName={"pagination"}
+              previousLinkClassName={"pagination__link"}
+              nextLinkClassName={"pagination__link"}
+              disabledClassName={"pagination__link--disabled"}
+              activeClassName={"pagination__link--active"}/>
+            <List className={classes.root} >
+            {tasks
+    .slice(offset, offset + PER_PAGE)
+    .map((task: Task) => (
+      <Task 
+        key={task._id}
+        task={task} 
+        updateTask={handleUpdateTask}
+        deleteTask={handleDeleteTask}
+        />
+    ) )}
             </List>
             </Box>
         </Grid>

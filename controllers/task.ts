@@ -19,7 +19,7 @@ export async function getTasks (req: Request, res: Response) {
     try {
         const tasks = await Task
             .find()
-            .sort({ createdAt: 1 })
+            .sort({ done: -1 })
         return res.status(200).json({ msg: 'Tasks fetched successfully', tasks });
     } catch (err) {
         console.log(err)

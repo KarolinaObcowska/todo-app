@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from 'axios';
 
-const server_url: string = 'http://localhost:8000/task/';
+const server_url: string = 'http://localhost:1234/task/';
 
 export const getTasks = async (): Promise<AxiosResponse<APIData>> => {
   try {

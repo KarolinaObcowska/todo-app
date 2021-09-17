@@ -5,6 +5,9 @@ interface Task {
     status: boolean
 }
 
+type selectedPage = {
+    selectedPage: number
+}
 interface TaskProps {
     task: Task
 }
