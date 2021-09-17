@@ -1,24 +1,27 @@
-import React from 'react'
-import { List, IconButton, ListItem, ListItemText, Checkbox, ListItemSecondaryAction } from '@material-ui/core';
+import React from 'react';
+import { IconButton, ListItem, ListItemText, Checkbox, ListItemSecondaryAction } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 
 interface Props {
     task: Task
+    updateTask: (task: Task) => void
+    deleteTask: (_id: string) => void
 }
-const Task = (props: Props) => {
-    return (
-        <List>
+
+
+
+const Task = ({task, updateTask, deleteTask}: Props) => {
+        return (
             <ListItem > 
-                <ListItemText>{props.task.what}
+                <ListItemText>{task.what}
                 </ListItemText >
-                <Checkbox checked={props.task.done}/> 
+                <Checkbox checked={task.done} onChange={() => updateTask(task)}/> 
                 <ListItemSecondaryAction >
-                    <IconButton aria-label='Delete Task'>
+                    <IconButton aria-label='Delete Task' onClick={() => deleteTask(task._id)}>
                         <DeleteIcon /> 
                     </IconButton>
                 </ListItemSecondaryAction>
             </ListItem>
-        </List>
     )
 }
 

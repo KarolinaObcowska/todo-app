@@ -8,7 +8,7 @@ export async function createTask (req: Request, res: Response) {
         const task = new Task({ ...body });
         await task.save();
 
-        return res.status(201).json({ msg: 'Task created', task })
+        return res.status(201).json({ msg: 'Task created' })
     } catch (err) {
         console.log(err);
         return res.status(500).json({ msg: 'Something went wrong...' })
@@ -17,7 +17,9 @@ export async function createTask (req: Request, res: Response) {
 
 export async function getTasks (req: Request, res: Response) {
     try {
-        const tasks = await Task.find().sort({ createdAt: -1 })
+        const tasks = await Task
+            .find()
+            .sort({ createdAt: 1 })
         return res.status(200).json({ msg: 'Tasks fetched successfully', tasks });
     } catch (err) {
         console.log(err)

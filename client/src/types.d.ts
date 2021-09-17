@@ -1,7 +1,8 @@
 interface Task {
     _id: string
     what: string
-    done?: boolean
+    done?: boolean,
+    status: boolean
 }
 
 interface TaskProps {

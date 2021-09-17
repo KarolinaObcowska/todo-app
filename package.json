@@ -6,7 +6,8 @@
   "scripts": {
     "server": "nodemon app.ts",
     "client": "npm start --prefix client",
-    "dev": "concurrently \"npm run server\" \"npm run client\""
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "seed": "node dbSeed.ts"
   },
   "author": "",
   "license": "ISC",
@@ -16,7 +17,9 @@
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "fake-todos": "^1.8.0",
-    "mongoose": "^6.0.5"
+    "mongoose": "^6.0.5",
+    "react-infinite-scroll-component": "^6.1.0",
+    "react-window": "^1.8.6"
   },
   "devDependencies": {
     "@types/body-parser": "^1.19.1",
